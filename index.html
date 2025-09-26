@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -521,12 +520,17 @@
 
                 <!-- New wall section -->
                 <div id="newWallSection" style="display: none;">
-                    <div class="copied-indicator">
-                        ✓ Wall name copied to clipboard!
-                    </div>
                     <div class="wall-name-display" id="wallNameDisplay"></div>
+                    <div style="margin: 15px 0;">
+                        <button class="btn btn-primary" onclick="copyWallName()" style="margin-right: 10px;">📋 Copy Wall Name</button>
+                        <button class="btn btn-success" onclick="openAccountabilityWall()">🔗 Open AccountabilityWall.com</button>
+                    </div>
                     <div class="instructions">
-                        <strong>📋 Just paste this name</strong> when creating your wall on AccountabilityWall.com (opening in new tab)
+                        <strong>Steps:</strong><br>
+                        1. Click "Copy Wall Name" above<br>
+                        2. Click "Open AccountabilityWall.com"<br>
+                        3. Paste the name when creating your wall<br>
+                        4. After creating, paste the wall link below
                     </div>
                     <input type="text" 
                            class="link-input" 
@@ -842,11 +846,11 @@
                     document.getElementById('wallNameDisplay').textContent = wallName;
                     document.getElementById('linkInput').value = '';
                     
-                    // Copy to clipboard and open AccountabilityWall.com
+                    // Try to copy to clipboard
                     navigator.clipboard.writeText(wallName).then(() => {
-                        setTimeout(() => {
-                            window.open('https://accountabilitywall.com', '_blank');
-                        }, 500);
+                        console.log('Wall name copied:', wallName);
+                    }).catch(() => {
+                        console.log('Could not auto-copy, user can copy manually');
                     });
                 }
             }, 1000);
@@ -876,6 +880,28 @@
         function openExistingLink() {
             const link = document.getElementById('existingLink').href;
             window.open(link, '_blank');
+        }
+
+        // Helper function to copy wall name
+        function copyWallName() {
+            const wallName = document.getElementById('wallNameDisplay').textContent;
+            navigator.clipboard.writeText(wallName).then(() => {
+                alert('✓ Wall name copied: ' + wallName);
+            }).catch(() => {
+                // Fallback method
+                const input = document.createElement('input');
+                input.value = wallName;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                document.body.removeChild(input);
+                alert('✓ Wall name copied: ' + wallName);
+            });
+        }
+
+        // Helper function to open AccountabilityWall.com
+        function openAccountabilityWall() {
+            window.open('https://accountabilitywall.com', '_blank');
         }
 
         // Close modal when clicking outside
